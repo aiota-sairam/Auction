@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Stats</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyAsZ6Dh5sGs_6hwKmFhP8NCUcxkym1y2Kc",
+      authDomain: "auction-cde8d.firebaseapp.com",
+      databaseURL: "https://auction-cde8d-default-rtdb.firebaseio.com",
+      projectId: "auction-cde8d",
+      storageBucket: "auction-cde8d.appspot.com",
+      messagingSenderId: "1021419199225",
+      appId: "1:1021419199225:web:99d54ece4183ccfe96a028"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+  import { getDatabase, get, ref, onValue, child} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+const db = getDatabase(app);
+const dbRef = ref(db);
+const balance = document.getElementById('balance');
+const balancecr = document.getElementById('balancecr');
+const amount = document.getElementById('amount');
+const tableBody = document.querySelector("#player-table tbody");
+const bowlersCount = document.querySelector("#bowlersCount");
+const batsmenCount = document.querySelector("#batsmenCount");
+const allRoundersCount = document.querySelector("#allRoundersCount");
+const wicketKeepersCount = document.querySelector("#wicketKeepersCount");
+function updateUI(snapshot) {
+    const data = snapshot.val();
+    balance.innerHTML = data.balance + " L";
+    balancecr.innerHTML = "(" + (data.balance/100) + ' Cr)';
+    bowlersCount.innerHTML = data.bo;
+    batsmenCount.innerHTML = data.ba;
+    allRoundersCount.innerHTML = data.al;
+    wicketKeepersCount.innerHTML = data.wk;
+    if (data.players && Array.isArray(data.players)) {
+        tableBody.innerHTML = '';
+        data.players.forEach(function(item) {
+            const row = tableBody.insertRow();
+            const nameCell = row.insertCell();
+            nameCell.textContent = item[0];
+            const amountCell = row.insertCell();
+            amountCell.textContent = item[1];
+        });
+    } else {
+      tableBody.innerHTML = '';
+    }
+}
+
+onValue(child(dbRef, "team8"), (snapshot) => {
+    updateUI(snapshot);
+});
+  </script>
+
+  <nav>
+    <img src="logo.png" alt="Team Logo">
+    <h1>Lucknow Super Giants</h1>
+  </nav>
+  <div class="container">
+    <div class="team-stats">
+      <div class="balance-stat">
+        <p>Current Balance:</p><span id="balance"></span><span id="balancecr"></span>
+      </div>
+      <div class="playertype">
+        <table id="typetable">
+          <thead>
+          </thead>
+          <tbody id="typeBody">
+            <tr id="bowlersRow">
+              <td>Bowlers</td>
+              <td id="bowlersCount"></td>
+            </tr>
+            <tr id="batsmenRow">
+              <td>Batsmen</td>
+              <td id="batsmenCount"></td>
+            </tr>
+            <tr id="allRoundersRow">
+              <td>All-Rounders</td>
+              <td id="allRoundersCount"></td>
+            </tr>
+            <tr id="wicketKeepersRow">
+              <td>Wicket Keepers</td>
+              <td id="wicketKeepersCount"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="player-table" id="player-table">
+      <h2>Team Players</h2>
+      <table id="playertable">
+        <thead>
+          <tr>
+            <th id="heading">NAME</th>
+            <th id="heading">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </body>
+</html>
