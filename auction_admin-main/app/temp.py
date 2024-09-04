@@ -1,7 +1,7 @@
 import json
 from firebase_admin import credentials, initialize_app, db
 
-cred_obj = credentials.Certificate(r"auction_admin-main\app\auction-cde8d-firebase-adminsdk-z0lr1-a55fcecad6.json")
+cred_obj = credentials.Certificate(r"auction-cde8d-firebase-adminsdk-z0lr1-c8a942fd88.json")
 app = initialize_app(cred_obj, {
     'databaseURL': 'https://auction-cde8d-default-rtdb.firebaseio.com/'
 })
